@@ -5,7 +5,6 @@ import random
 
 
 
-
 zn=[0,1,2]
 zn=['-','x','o']
 zn='-xo'
@@ -77,7 +76,8 @@ def read_i(stroka):
     var_ = [str(i) for i in var]
     while True:
         v=input(stroka)
-        if v in str(var_):
+        if not(v == '') and (v in str(var_)):
+        #if v in str(var_):
             return int(v)
         else:
             print('неправильный ввод, повторите')
