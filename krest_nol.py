@@ -3,6 +3,9 @@
 # ЗначениЯ 0=пусто. 1 игрок 1. 2=игрок 2
 import random
 
+
+
+
 zn=[0,1,2]
 zn=['-','x','o']
 zn='-xo'
@@ -68,13 +71,27 @@ def resh():
     return [svob,rez1,rez2,rep1,rep2,resh1,resh2]
 
 
+
+def read_i(stroka):
+    var = [0, 1, 2]
+    var_ = [str(i) for i in var]
+    while True:
+        v=input(stroka)
+        if v in str(var_):
+            return int(v)
+        else:
+            print('неправильный ввод, повторите')
+
 def read_hod():
     #var=[i for i in range(3)];
     var=[0,1,2];iz=False
     while not iz:
         #vivod()
-        i=int(input('введите i:'))
-        j=int(input('введите j:'))
+        #i=int(input('введите i:'))
+        #j=int(input('введите j:'))
+        i=read_i('введите i:')
+        j=read_i('введите j:')
+
         zz=(i in var) and (j in var)
         #print('zz==',zz)
         if (i in var) and (j in var):
