@@ -2,11 +2,12 @@
 import random
 
 #Случайная инициализация начальной позиции
-
+print('Подождите, идёт случайная расстановка кораблей, иногда долго')
 dlina_f=6
 
 zz='О123'
 zz='О■TX'
+zz=['О','■','T','X']
 #matr=[[zn[random.randint(0, 2)] for j in range(3)] for i in range(3)]
 #print(matr)
 #print(max(matr))
@@ -30,10 +31,13 @@ def hod():
 
 
 
+
+
 class ship:
     def __init__(self, len):
         self.dlina=dlina_f
         self.len= len
+        self.dell = 0 #количество убитых клеток
         self.gor = -1
         self.x = -1
         self.y = -1
@@ -114,6 +118,27 @@ class desc:
     def desc(self):
         for m in self.matr:print(m)
 
+    def kill(self,pt): #pt=точка удара
+        #print('Проверка точки попадания=',pt)
+        ships=self.ships
+        for sh_i in range(len(ships)):
+            sh=ships[sh_i]
+            dell=sh.dell
+            for pp in sh.zn:
+                if pp[0]+1==pt[0] and pp[1]+1==pt[1]:
+                    sh.dell+=1;#print('корабль попал=',sh_i)
+                    if sh.len==sh.dell:print('УБИЛ!')
+            ships[sh_i]=sh
+            if sh.dell==sh.len:
+                for pp in sh.zn:
+                    x=pp[0];y=pp[1]
+                    for xx in range(x-1,x+2):
+                        for yy in range(y - 1, y + 2):
+                            if (0<=xx<=5) and (0<=yy<=5) and (self.matr[xx][yy]==0):
+                                self.matr[xx][yy]=2
+        self.ships = ships
+
+
     def hod(self):
         hod_=False
         while not hod_:
@@ -126,6 +151,7 @@ class desc:
         else:
             self.kol_pol-=1
             print(f'Попадание!!! Осталось целых {self.kol_pol} клеток')
+            self.kill(hh)
 
 
     def hod_rand(self):
@@ -140,6 +166,7 @@ class desc:
         else:
             self.kol_pol-=1
             print(f'Попадание!!! Осталось целых {self.kol_pol} клеток')
+            self.kill(hh)
 
 
     def desc2(self):
@@ -155,16 +182,20 @@ class desc:
 
 
 def igra_desc(dd1:desc,dd2:desc):
+    zz1=list(zz);
+    zz2=list(zz);
+    zz1[1]=zz1[0]
     strr = '==='
     for i in range(dd1.dlina): strr = strr + '|' + str(i + 1)
-    print(strr+'    Моё поле');
+    print(strr+'    Ваше поле');
+
     i = 0
     for (m1,m2) in zip(dd1.matr, dd2.matr):
         i += 1;
         strr = str(i)+'=='
-        for mm in m1: strr = strr + '|' + zz[mm]
+        for mm in m1: strr = strr + '|' + zz1[mm]
         strr+='    '
-        for mm in m2: strr = strr + '|' + zz[mm]
+        for mm in m2: strr = strr + '|' + zz2[mm]
         print(strr)
 
 
@@ -187,16 +218,36 @@ def igra(dd1:desc,dd2:desc):
 
 
 
+#
+#
+# dd=desc()
+# dd.rand();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+# dd.hod();dd.desc2()
+#
+# dd.hod_rand();dd.desc2()
+
+
+
 
 
 
 dd1=desc()
 dd1.rand()
-#dd1.desc2()
+print('Подсказка моё поле!!!');dd1.desc2()
 
 dd2=desc()
 dd2.rand()
-#dd2.desc2()
+print('Это ваше поле!!!');dd2.desc2()
 print('--------------------------------')
 igra(dd1,dd2)
 
