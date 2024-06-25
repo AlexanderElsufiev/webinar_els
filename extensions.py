@@ -3,7 +3,7 @@ import telebot
 from datetime import datetime
 import requests
 import json
-
+from my_bot_token import *
 
 
 
@@ -11,7 +11,7 @@ class my_bot:
     def __init__(self):#, width, height):
         # self.width = width
         # self.height = height
-        self.token = "7201521200:AAGg6fCFrxwO2RcqJpWnc_f9rPb-pZkEBmw"
+
         self.users = {'bot': ['Not']}
 
         self.valut = {'евро': 'EUR', 'доллар': 'USD', 'рубль': 'RUB', 'лари': 'GEL'}
@@ -36,7 +36,7 @@ class my_bot:
     #     return self.token
 
     def get_bot(self):
-        return telebot.TeleBot(self.token)
+        return telebot.TeleBot(get_token())
 
 
     def str_number(self,item):
