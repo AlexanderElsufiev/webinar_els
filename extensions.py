@@ -55,18 +55,33 @@ class my_bot:
         return number
 
     def kurs(self,base, quote):
-        r = requests.get(f'https://min-api.cryptocompare.com/data/price?fsym={base}&tsyms={quote}')
+        rez=''
+        try:  # Попытка преобразовать элемент в число
+            r = requests.get(f'https://min-api.cryptocompare.com/data/price?fsym={base}&tsyms={quote}')
+        except requests.exceptions.HTTPError as http_err:
+            rez=f'HTTP error occurred: {http_err}' # Выводит HTTP ошибки
+        except requests.exceptions.ConnectionError as conn_err:
+            rez=f'Error connecting: {conn_err}'  # Выводит ошибки подключения
+        except requests.exceptions.Timeout as timeout_err:
+            rez=f'Timeout error: {timeout_err}'  # Выводит ошибки тайм-аута
+        except requests.exceptions.RequestException as req_err:
+            rez=f'An error occurred: {req_err}' # Выводит все остальные ошибки
+        if rez!='':return(None,rez+'\n В общем - ошибка связи!')
+
         dict = json.loads(r.content)
         for val in dict:
             zn = dict[val]
-        # print('dict=', dict)
-        # print(f'val={val} zn={zn}')
-        return zn
+        if not(isinstance(zn, float) or isinstance(zn, int)):
+            return (None, 'Ошибка парсинга пришедших данных о курсе валют')
+        return (zn,rez)
 
     def get_price(self,base, quote, amount):
         # kurs_ = kurs(base, quote)
         # rez += f'\n курс={kurs_}'
-        return amount * self.kurs(base, quote)
+        kurs_=self.kurs(base, quote)
+        if kurs_[0] is None:
+            return kurs_
+        else:return (amount * kurs_[0],'')
 
     def obrabot_valut(self,message):
         user_ = message.from_user.username
@@ -111,7 +126,8 @@ class my_bot:
                 return self.valut_err[3]
             rez = f'правильность ввода={base} {quote} {amount}'
             summ = self.get_price(base, quote, amount)
-            rez += f'\n значение суммы = {summ} единиц {quote}'
+            if summ[0] is None:return summ[1]
+            rez += f'\n значение суммы = {summ[0]} единиц {quote}'
             self.users[user_]['step'] = 3
             #print(rez)
             return rez
@@ -147,7 +163,8 @@ class my_bot:
             # print(rez)
             # kurs_=kurs(base, quote)
             summ = self.get_price(base, quote, amount)
-            rez += f'\n значение суммы = {summ} единиц {quote}'
+            if summ[0] is None:return summ[1]
+            rez += f'\n значение суммы = {summ[0]} единиц {quote}'
             self.users[user_]['step'] = 3
             return rez
 
