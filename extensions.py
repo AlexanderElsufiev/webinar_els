@@ -3,7 +3,7 @@ import telebot
 from datetime import datetime
 import requests
 import json
-from my_bot_token import *
+from my_bot_token import TOKEN
 
 
 
@@ -36,7 +36,7 @@ class my_bot:
     #     return self.token
 
     def get_bot(self):
-        return telebot.TeleBot(get_token())
+        return telebot.TeleBot(TOKEN)
 
 
     def str_number(self,item):
@@ -54,7 +54,8 @@ class my_bot:
                     number = None
         return number
 
-    def kurs(self,base, quote):
+    @staticmethod
+    def kurs(base, quote):
         rez=''
         try:  # Попытка преобразовать элемент в число
             r = requests.get(f'https://min-api.cryptocompare.com/data/price?fsym={base}&tsyms={quote}')
@@ -75,10 +76,11 @@ class my_bot:
             return (None, 'Ошибка парсинга пришедших данных о курсе валют')
         return (zn,rez)
 
-    def get_price(self,base, quote, amount):
+    @staticmethod
+    def get_price(base, quote, amount):
         # kurs_ = kurs(base, quote)
         # rez += f'\n курс={kurs_}'
-        kurs_=self.kurs(base, quote)
+        kurs_=my_bot.kurs(base, quote)
         if kurs_[0] is None:
             return kurs_
         else:return (amount * kurs_[0],'')
@@ -125,7 +127,7 @@ class my_bot:
             if amount is None:
                 return self.valut_err[3]
             rez = f'правильность ввода={base} {quote} {amount}'
-            summ = self.get_price(base, quote, amount)
+            summ = my_bot.get_price(base, quote, amount)
             if summ[0] is None:return summ[1]
             rez += f'\n значение суммы = {summ[0]} единиц {quote}'
             self.users[user_]['step'] = 3

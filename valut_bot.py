@@ -3,9 +3,11 @@ import telebot
 from datetime import datetime
 import requests
 import json
-from extensions import *
 
+from extensions import *  # ЭТОТ ВАРИАНТ ДЛЯ ДЗ ПО БОТУ
+#from valut_bot_all import * # ЭТОТ ВАРИАНТ мой для валют и погоды
 
+from my_bot_token import *
 
 
 
@@ -24,6 +26,7 @@ def send_text(message):
     # first_name=message.from_user.first_name
     # last_name = message.from_user.last_name
     otvet=mbot.obrabot_txt(message)
+    print(otvet)
     bot.send_message(chat_id,  otvet)
 
 
