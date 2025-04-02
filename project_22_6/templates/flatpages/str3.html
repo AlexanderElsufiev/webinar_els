@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+{{ flatpage.title }}
+{% endblock title %}
+
+{% block content %}
+   <hr>
+<h3>
+    <hr>жирным=<br>
+    <b>{{ flatpage.content }}</b>>
+    <hr>курсивом=<br>
+    <i>{{ flatpage.content }}</i>>
+    <hr>мелким шрифтом=<br>
+    <font size="5">{{ flatpage.content }}</font>>
+    <hr>крупным шрифтом красным цветом=<br>
+    <p style="color: red;font-size: 50px;background-color: yellow;">
+    {{ flatpage.content }}
+    </p>
+    </h3>
+ <hr>
+{% endblock content %}
